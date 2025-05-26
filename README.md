@@ -18,9 +18,11 @@ The following flags are available:
 - `status-cmd`: The path to `vpn-user-portal-status`. Useful if it is not on the `$PATH`.
 - `status-flags`: Flags to pass to `vpn-user-portal-status`. `connections` includes information about the profiles connections. `all` includes all wireguard connections in the connections info.
 
-[!NOTE] The metric `eduvpn_unique_users` only has a value if the status flag `connections` is passed to the exporter.
+> [!NOTE]
+> The metric `eduvpn_unique_users` only has a value if the status flag `connections` is passed to the exporter.
 
-[!WARNING] Passing the `connections` flag will introduce high cardinality metrics.
+> [!WARNING]
+> Passing the `connections` flag will introduce high cardinality metrics.
 
 ### Logging configuration
 The log level can be set via `log.level`. Supported levels are `debug`, `info`, `warn` and `error`. 
