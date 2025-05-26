@@ -1,0 +1,56 @@
+groups:
+  - name: eduVPN
+    rules:
+      - alert: eduVPNDown
+        expr: 'eduvpn_up == 0'
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: eduVPN down
+          description: eduVPN Portal instance {{ $labels.instance }} is down.
+
+      - alert: eduVPNScrapeFailures
+        expr: 'increase(eduvpn_scrape_failures_total[5m]) >= 5'
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: eduVPN has had {{ $value }} scrape failures in the last 5 minutes.
+          description: eduVPN Portal instance {{ $labels.instance }} has had {{ $value }} scrape failures in the last 5 minutes. Please check the logs of the eduvpn_exporter.
+
+      - alert: eduVPNConnectionPoolAlmostFull
+        expr: '0.95 > eduvpn_active_connections / eduvpn_max_connections >= 0.75'
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $value | humanizePercentage }} of available connections used for profile {{ $labels.profile }}."
+          # description: 
+
+      - alert: eduVPNConnectionPoolFull
+        expr: 'eduvpn_active_connections / eduvpn_max_connections >= 0.95'
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $value | humanizePercentage }} of available connections used for profile {{ $labels.profile }}."
+          # description: 
+
+      - alert: eduVPNIPPoolAmostFull
+        expr: '0.95 > eduvpn_allocated_ips{} / (eduvpn_allocated_ips{} + eduvpn_free_ips{}) >= 0.75'
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $value | humanizePercentage }} of available IPs in {{ $labels.vpn_proto }} profile {{ $labels.profile }} are allocated."
+          # description: 
+
+      - alert: eduVPNIPPoolFull
+        expr: 'eduvpn_allocated_ips{} / (eduvpn_allocated_ips{} + eduvpn_free_ips{}) >= 0.95'
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $value | humanizePercentage }} of available IPs in {{ $labels.vpn_proto }} profile {{ $labels.profile }} are allocated."
+          # description: 

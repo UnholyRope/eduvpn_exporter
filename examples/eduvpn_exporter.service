@@ -1,0 +1,27 @@
+[Unit]
+Description=Prometheus EduVPN Exporter
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/eduvpn_exporter \
+    '--status-flags=connections' \
+    '--status-flags=all' \
+    '--web.listen-address=:10036' \
+    '--web.telemetry-path=/metrics'
+
+SyslogIdentifier=eduvpn_exporter
+Restart=always
+RestartSec=1
+StartLimitInterval=0
+
+ProtectHome=yes
+NoNewPrivileges=yes
+
+ProtectSystem=strict
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=yes
+
+[Install]
+WantedBy=multi-user.target
